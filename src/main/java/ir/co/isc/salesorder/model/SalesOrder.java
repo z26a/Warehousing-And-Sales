@@ -1,24 +1,23 @@
 package ir.co.isc.salesorder.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import ir.co.isc.salesorder.DeliveryStatus;
 import ir.co.isc.salesorder.OrderActive;
 import ir.co.isc.salesorder.OrderType;
-import ir.co.isc.salesorder.dto.OrderItemPrimaryKey;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Slf4j
-@Getter
-@Setter
+@Data
+@Component
 public class SalesOrder {
 
 
@@ -31,26 +30,28 @@ public class SalesOrder {
     @Column(nullable = false)
     private Long customerId;
 
+    @Column(nullable = false)
     private String customerAddress;
 
     @Column(nullable = false)
     private LocalDate orderDate = LocalDate.now();
 
     private String orderDesc;
+
     private double totalPrice;
+
     private Long accountingCode;
 
-    @Enumerated(EnumType.STRING)
-//    @Column(nullable = false)
-    private OrderType orderType;
+//    @Enumerated(EnumType.STRING)
+//    private OrderType orderType;
 
     private Long paymentCode;
 
-    @Enumerated(EnumType.STRING)
-    private DeliveryStatus deliveryStatus;
-
-    @Enumerated(EnumType.STRING)
     private OrderActive orderActive;
+
+    private int status;
+
+    private int activityCheck;
 
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "salesOrder")
     private Set<OrderItem> orderItemList;
@@ -65,7 +66,7 @@ public class SalesOrder {
 
     public void addItem(OrderItem orderItem) {
         if (orderItemList == null)
-            orderItemList = new HashSet<OrderItem>();
+            orderItemList = new HashSet<>();
         orderItem.setSalesOrder(this);
         orderItemList.add(orderItem);
     }

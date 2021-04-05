@@ -1,33 +1,28 @@
 package ir.co.isc.salesorder.model;
 
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.annotate.JsonIgnore;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
 @Entity
 @Slf4j
-@Getter
-@Setter
+@Data
+@Component
 public class OrderItem {
 
-//    @EmbeddedId
-//    @JsonIgnore
-//    private OrderItemPrimaryKey pk;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pk;
-
-//    @Id
-//    @GeneratedValue
     private Long productId;
 
-//    @Column(nullable = false)
-//    private String itemName;
 
     @Column(nullable = false)
     private long productCount;
@@ -36,4 +31,21 @@ public class OrderItem {
     @JsonIgnore
     @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
     private SalesOrder salesOrder;
+
+    public OrderItem() {
+
+    }
+
+    @Autowired
+    public OrderItem(Long productId, long productCount, SalesOrder salesOrder) {
+        this.productId = productId;
+        this.productCount = productCount;
+        this.salesOrder = salesOrder;
+    }
+
+//    public void setSalesOrder(SalesOrder salesOrder) {
+//        this.salesOrder = salesOrder;
+//    }
 }
+
+

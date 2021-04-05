@@ -17,9 +17,6 @@ public class OrderItemDTO {
     @Column(nullable = false)
     private Long id;
 
-//    @Column(nullable = false)
-//    private String itemName;
-
     @Column(nullable = false)
     private long itemQuantity;
 

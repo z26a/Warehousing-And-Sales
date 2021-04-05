@@ -62,6 +62,7 @@
             <scope>runtime</scope>
         </dependency>
 
+
     </dependencies>
 
     <build>
@@ -70,12 +71,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-<!--                    <excludes>-->
-<!--                        <exclude>-->
-<!--                            <groupId>org.projectlombok</groupId>-->
-<!--                            <artifactId>lombok</artifactId>-->
-<!--                        </exclude>-->
-<!--                    </excludes>-->
                     <image>
                         <builder>paketobuildpacks/builder:tiny</builder>
                         <env>
@@ -94,13 +89,6 @@
                         <goals>
                             <goal>enhance</goal>
                         </goals>
-<!--                        <configuration>-->
-<!--                            <failOnError>true</failOnError>-->
-<!--                            <enableLazyInitialization>true</enableLazyInitialization>-->
-<!--                            <enableDirtyTracking>true</enableDirtyTracking>-->
-<!--                            <enableAssociationManagement>true</enableAssociationManagement>-->
-<!--                            <enableExtendedEnhancement>false</enableExtendedEnhancement>-->
-<!--                        </configuration>-->
                     </execution>
                 </executions>
             </plugin>
