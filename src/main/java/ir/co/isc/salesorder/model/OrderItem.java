@@ -3,6 +3,7 @@ package ir.co.isc.salesorder.model;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.annotate.JsonIgnore;
@@ -13,16 +14,20 @@ import javax.persistence.*;
 
 @Entity
 @Slf4j
-@Data
+@Getter
+@Setter
 @Component
+@NoArgsConstructor
 public class OrderItem {
 
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    private Long id;
 
+    @Column(nullable = false)
+    private Long productId;
 
     @Column(nullable = false)
     private long productCount;
@@ -32,9 +37,6 @@ public class OrderItem {
     @JoinColumn(name = "salesOrder_id", referencedColumnName = "id", nullable = false)
     private SalesOrder salesOrder;
 
-    public OrderItem() {
-
-    }
 
     public OrderItem(Long productId, long productCount, SalesOrder salesOrder) {
         this.productId = productId;
@@ -42,9 +44,7 @@ public class OrderItem {
         this.salesOrder = salesOrder;
     }
 
-//    public void setSalesOrder(SalesOrder salesOrder) {
-//        this.salesOrder = salesOrder;
-//    }
+
 }
 
 

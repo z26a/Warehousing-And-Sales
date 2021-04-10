@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping(value="/api/accounting/")
+@RequestMapping(value="/api/accounting/",method = {RequestMethod.GET,RequestMethod.DELETE})
 public class AccountingController {
 
     @Autowired

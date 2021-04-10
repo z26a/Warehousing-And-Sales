@@ -4,6 +4,7 @@ import ir.co.isc.salesorder.OrderActive;
 import ir.co.isc.salesorder.OrderType;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,10 @@ import java.util.Set;
 
 @Entity
 @Slf4j
-@Data
+@Getter
+@Setter
 @Component
+@NoArgsConstructor
 public class SalesOrder {
 
 
@@ -59,9 +62,6 @@ public class SalesOrder {
 
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "salesOrder")
     private Set<OrderItem> orderItemList;
-
-    public SalesOrder() {
-    }
 
     public SalesOrder(Long customerId, String customerAddress) {
         this.customerId = customerId;
