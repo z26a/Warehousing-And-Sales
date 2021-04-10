@@ -29,14 +29,13 @@ public class OrderItem {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "salesOrder_id", referencedColumnName = "id", nullable = false)
     private SalesOrder salesOrder;
 
     public OrderItem() {
 
     }
 
-    @Autowired
     public OrderItem(Long productId, long productCount, SalesOrder salesOrder) {
         this.productId = productId;
         this.productCount = productCount;

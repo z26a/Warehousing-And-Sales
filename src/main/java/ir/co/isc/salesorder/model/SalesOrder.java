@@ -36,6 +36,10 @@ public class SalesOrder {
     @Column(nullable = false)
     private LocalDate orderDate = LocalDate.now();
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderActive orderActive;
+
     private String orderDesc;
 
     private double totalPrice;
@@ -47,11 +51,11 @@ public class SalesOrder {
 
     private Long paymentCode;
 
-    private OrderActive orderActive;
-
     private int status;
 
     private int activityCheck;
+
+    private String transport;
 
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "salesOrder")
     private Set<OrderItem> orderItemList;

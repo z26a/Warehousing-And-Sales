@@ -1,5 +1,6 @@
 package ir.co.isc.salesorder.controller;
 
+import ir.co.isc.salesorder.OrderActive;
 import ir.co.isc.salesorder.dto.CartDTO;
 import ir.co.isc.salesorder.model.OrderItem;
 import ir.co.isc.salesorder.model.SalesOrder;
@@ -48,10 +49,10 @@ public class CustomerController {
     }
 
 
-    @DeleteMapping(path="/delete-order/{orderId}")
+    @PutMapping(path="/delete-order/{orderId}")
     public Object deleteOrderById(@PathVariable(name="orderId") String orderId){
         try{
-        salesOrderRepository.deleteById(Long.valueOf(orderId));
+        salesOrderRepository.deactivateOrderById(Long.valueOf(orderId));
         log.info("Order deleted successfully");
         return "Order deleted successfully";
         }catch (Exception e){
@@ -69,7 +70,10 @@ public class CustomerController {
         try {
             SalesOrder salesOrder=new SalesOrder();
             salesOrder.setCustomerId(Long.getLong(cartDTO.getCustomerId()));
-            for (OrderItem item : cartDTO.getOrderItem()) {
+            salesOrder.setCustomerAddress(cartDTO.getCustomerAddress());
+            salesOrder.setTransport(cartDTO.getTransport());
+            salesOrder.setOrderActive(OrderActive.ACTIVE);
+            for (OrderItem item : cartDTO.getOrderItemList()) {
                 salesOrder.addItem(item);
             }
             salesOrderRepository.save(salesOrder);
