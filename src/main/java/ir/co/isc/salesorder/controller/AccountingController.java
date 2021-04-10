@@ -18,9 +18,16 @@ public class AccountingController {
     @Autowired
     private SalesOrderRepository salesOrderRepository;
 
-    @PostMapping(path="/productInformation")
-    public Object sendProductInfo(@RequestBody List<OrderItem> orderItemList,@RequestParam(name="transport")) {
+    @PostMapping(path="/checkProductActivity")
+    public Object checkProductAvailability(@RequestBody SalesOrder salesOrder) {
+        try{
+            throw new UnsupportedOperationException("Not supported yet."); //Require accounting service.
+        }catch (Exception e){
+            log.error("Error while checking the availability of items: " + e.getMessage() );
+            System.err.println(e.getMessage());
+        }
 
+        return null;
     }
 
 }
