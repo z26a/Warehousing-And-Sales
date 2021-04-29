@@ -1,17 +1,25 @@
 package ir.co.isc.salesorder.service;
 
 import ir.co.isc.salesorder.OrderActive;
+import ir.co.isc.salesorder.StatusCodes;
 import ir.co.isc.salesorder.dto.CartDTO;
+import ir.co.isc.salesorder.dto.DeleteOrderByIdResponse;
+import ir.co.isc.salesorder.dto.GetOrderByIdResponse;
+import ir.co.isc.salesorder.dto.UpdatedCartDTO;
 import ir.co.isc.salesorder.model.OrderItem;
 import ir.co.isc.salesorder.model.SalesOrder;
+import ir.co.isc.salesorder.repository.OrderItemRepository;
 import ir.co.isc.salesorder.repository.SalesOrderRepository;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.ServiceMode;
+import java.util.Optional;
 
 @Service
 @NoArgsConstructor
@@ -21,43 +29,55 @@ public class CustomerService {
     @Autowired
     private SalesOrderRepository salesOrderRepository;
 
-    public Object getAllOrdersOfCustomer(String id) {
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
-        try {
-            if (salesOrderRepository.findOrdersByCustomerId(Long.valueOf(id)).isEmpty()) {
+    public Object getAllOrdersOfCustomer(Long id) {
+
+            if (salesOrderRepository.findOrdersByCustomerId(id).isEmpty()) {
                 return "No orders for user " + id;
             } else
-                return salesOrderRepository.findOrdersByCustomerId(Long.valueOf(id));
-        } catch (Exception e) {
-            log.error("Error while getting orders of customer with customer id " + e.getMessage());
-            return null;
-        }
+                return salesOrderRepository.findOrdersByCustomerId(id);
 
     }
-        public Object getOrderById (String orderId){
+        public Object getOrderById (Long orderId){
             try {
-                return salesOrderRepository.findById(Long.valueOf(orderId));
+
+             SalesOrder salesOrderResponse= salesOrderRepository.findById(orderId).get();
+             GetOrderByIdResponse getOrderByIdResponse=new  GetOrderByIdResponse();
+             getOrderByIdResponse.setSalesOrder(salesOrderResponse);
+             getOrderByIdResponse.setStatusCode(StatusCodes.OK);
+                return getOrderByIdResponse;
+
             } catch (Exception e) {
                 log.error("Error while getting an order by orderId " + e.getMessage());
-                return null;
+                GetOrderByIdResponse getOrderByIdResponse=new  GetOrderByIdResponse();
+                getOrderByIdResponse.setStatusCode(StatusCodes.REQUEST_PROCESSING_ERROR);
+                getOrderByIdResponse.setDescription("");
+                getOrderByIdResponse.setResults("Error while getting an order by orderId "+orderId);
+                return getOrderByIdResponse;
             }
         }
 
-        public Object deleteOrderById (String orderId){
+        public Object deleteOrderById (Long orderId){
             try {
-                salesOrderRepository.deactivateOrderById(Long.valueOf(orderId));
+                salesOrderRepository.deactivateOrderById(orderId);
+                DeleteOrderByIdResponse deleteOrderByIdResponse=new DeleteOrderByIdResponse();
                 log.info("Order deleted successfully");
-                return "Order deleted successfully";
+                deleteOrderByIdResponse.setStatusCode(StatusCodes.OK);
+                deleteOrderByIdResponse.setResults("Order deleted successfully");
+                return deleteOrderByIdResponse;
             } catch (Exception e) {
                 log.error("Error while deleting an order: " + e.getMessage());
-                return null;
+                DeleteOrderByIdResponse deleteOrderByIdResponse=new DeleteOrderByIdResponse();
+                deleteOrderByIdResponse.setStatusCode(StatusCodes.REQUEST_PROCESSING_ERROR);
+                deleteOrderByIdResponse.setDescription("");
+                deleteOrderByIdResponse.setResults("Error while deleting an order by orderId "+orderId);
+                return deleteOrderByIdResponse;
             }
         }
 
-        public Object saveBuyOrder (CartDTO cartDTO, HttpServletResponse response){
-            try {
-
-                // check availability of items using an api from warehouse
+        public Object saveBuyOrder (CartDTO cartDTO){
 
                 SalesOrder salesOrder = new SalesOrder();
                 salesOrder.setCustomerId(Long.valueOf(cartDTO.getCustomerId()));
@@ -67,12 +87,47 @@ public class CustomerService {
                 for (OrderItem item : cartDTO.getOrderItemList()) {
                     salesOrder.addItem(item);
                 }
+            try {
+                // check availability of items using an api from warehouse
+//                throw new UnsupportedOperationException("Not supported yet."); //Require warehouse service.
+                // check viability of moving the items using an api from delivery
+//                throw new UnsupportedOperationException("Not supported yet."); //Require warehouse service.
                 salesOrderRepository.save(salesOrder);
                 return "Your order has been successfully registered";
-            } catch (Exception e) {
-                log.error("Error while saving an order: " + e.getMessage());
 
-                return null;
+            }catch(Exception e){
+                log.error("Error while processing the order " + e.getMessage() );
+                return "A problem while processing your order";
             }
+
+        }
+
+        public Object updateBuyOrder(Long orderId,UpdatedCartDTO updatedCartDTO, HttpServletResponse response){
+            SalesOrder salesOrder = salesOrderRepository.findById(orderId).
+                    orElseThrow(() -> new EntityNotFoundException(orderId.toString()));
+            salesOrder.setTransport(updatedCartDTO.getTransport());
+            salesOrder.setCustomerAddress(updatedCartDTO.getCustomerAddress());
+            salesOrder.setOrderItemList(null);
+            for (OrderItem item:updatedCartDTO.getOrderItemList()){
+                salesOrder.addItem(item);
+            }
+            try {
+                // check availability of items using an api from warehouse
+                // throw new UnsupportedOperationException("Not supported yet."); //Require warehouse service.
+                // check viability of moving the items using an api from delivery
+
+                salesOrderRepository.deleteById(orderId);
+                orderItemRepository.deleteAllBySalesOrderId(orderId);
+                salesOrderRepository.save(salesOrder);
+                response.setStatus(HttpServletResponse.SC_OK);
+                return "Your order has been successfully updated";
+
+            }catch(Exception e){
+                log.error("Error while updating the order " + e.getMessage() );
+                return "Error while processing your order";
+            }
+
+
+
         }
     }

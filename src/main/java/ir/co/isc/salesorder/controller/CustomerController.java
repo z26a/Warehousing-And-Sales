@@ -1,8 +1,13 @@
 
 package ir.co.isc.salesorder.controller;
 
+import ir.co.isc.salesorder.OrderActive;
 import ir.co.isc.salesorder.dto.CartDTO;
+import ir.co.isc.salesorder.dto.UpdatedCartDTO;
+import ir.co.isc.salesorder.model.OrderItem;
+import ir.co.isc.salesorder.model.SalesOrder;
 import ir.co.isc.salesorder.service.CustomerService;
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @RestController
-@RequestMapping(value="/api/orders",method = {RequestMethod.GET,RequestMethod.DELETE})
+@RequestMapping(value="/api/orders",method = {RequestMethod.GET,RequestMethod.PUT,RequestMethod.POST})
 @Slf4j
 public class CustomerController {
 
@@ -20,20 +25,26 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping(path="/{id}")
-    public Object getAllOrdersOfCustomer(@PathVariable(name = "id") String id) {
-       return customerService.getAllOrdersOfCustomer(id);
+    public Object getAllOrdersOfCustomer(@PathVariable(name = "id") Long id) {
+        try {
+            return customerService.getAllOrdersOfCustomer(id);
+        } catch (Exception e) {
+            log.error("Error while getting orders of customer with customer id " + e.getMessage());
+            return null;
+        }
+
     }
 
 
     @GetMapping(path="/get-order/{orderId}")
     public Object getOrderById(@PathVariable(name="orderId") String orderId){
-return customerService.getOrderById(orderId);
+return customerService.getOrderById(Long.valueOf(orderId));
     }
 
 
     @PutMapping(path="/delete-order/{orderId}")
     public Object deleteOrderById(@PathVariable(name="orderId") String orderId){
-return customerService.deleteOrderById(orderId);
+return customerService.deleteOrderById(Long.valueOf(orderId));
     }
 
 
@@ -41,7 +52,28 @@ return customerService.deleteOrderById(orderId);
     public Object saveBuyOrder(
             @RequestBody CartDTO cartDTO, HttpServletResponse response)
     {
-        return  customerService.saveBuyOrder(cartDTO,response);
+        try {
+            return  customerService.saveBuyOrder(cartDTO);
+        } catch (Exception e) {
+            log.error("Error while saving an order: " + e.getMessage());
+            return null;
+        }
+
     }
+
+    @PutMapping(path="/modify-cart/{orderId}")
+        public Object updateBuyOrder(@PathVariable(name="orderId") String orderId,
+                                     @RequestBody UpdatedCartDTO updatedCartDTO,
+                                     HttpServletResponse response){
+            try{
+                return customerService.updateBuyOrder(Long.valueOf(orderId),updatedCartDTO,response);
+            }catch (Exception e){
+                log.error("Error while updating an order: "+e.getMessage());
+                return null;
+            }
+
+
+        }
+
 
 }

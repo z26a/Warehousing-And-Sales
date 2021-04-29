@@ -2,10 +2,7 @@ package ir.co.isc.salesorder.model;
 
 import ir.co.isc.salesorder.OrderActive;
 import ir.co.isc.salesorder.OrderType;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,6 +18,7 @@ import java.util.Set;
 @Setter
 @Component
 @NoArgsConstructor
+@AllArgsConstructor
 public class SalesOrder {
 
 
@@ -66,6 +64,21 @@ public class SalesOrder {
     public SalesOrder(Long customerId, String customerAddress) {
         this.customerId = customerId;
         this.customerAddress=customerAddress;
+    }
+
+    public SalesOrder(Long customerId,String customerAddress,OrderActive orderActive){
+        this.customerId=customerId;
+        this.customerAddress=customerAddress;
+        this.orderActive=orderActive;
+
+    }
+
+    public SalesOrder(Long customerId, String customerAddress,
+                     String transport,OrderActive orderActive) {
+        this.customerId = customerId;
+        this.customerAddress = customerAddress;
+        this.orderActive = orderActive;
+        this.transport = transport;
     }
 
     public void addItem(OrderItem orderItem) {
