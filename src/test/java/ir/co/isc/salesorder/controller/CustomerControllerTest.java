@@ -106,23 +106,65 @@ mockMvc.perform(MockMvcRequestBuilders.get(baseURI+"/{id}",12345L))
 
     @Test
     void getOrderByIdTest() throws Exception {
-        String response="{\"id\":2,\"customerId\":12345,\"customerAddress\":\"Misaagh Alley,Shariati,Tehran,Iran\"" +
-                ",\"orderDate\":\"2021-04-11\",\"orderActive\":\"ACTIVE\",\"orderDesc\":null,\"totalPrice\":0.0," +
-                "\"accountingCode\":null,\"paymentCode\":null,\"status\":0,\"activityCheck\":0,\"transport\":\"bike\"," +
-                "\"orderItemList\":[{\"id\":35,\"productId\":4,\"productCount\":10,\"productName\":null," +
-                "\"productAvailability\":null},{\"id\":34,\"productId\":7,\"productCount\":6,\"productName\":null," +
-                "\"productAvailability\":null},{\"id\":37,\"productId\":5,\"productCount\":5,\"productName\":null," +
-                "\"productAvailability\":null},{\"id\":36,\"productId\":6,\"productCount\":1,\"productName\":null," +
-                "\"productAvailability\":null}]}";
+        
+        String response="{\n" +
+                "    \"statusCode\": \"OK\",\n" +
+                "    \"description\": null,\n" +
+                "    \"results\": null,\n" +
+                "    \"salesOrder\": {\n" +
+                "        \"id\": 2,\n" +
+                "        \"customerId\": 12345,\n" +
+                "        \"customerAddress\": \"Misaagh Alley,Shariati,Tehran,Iran\",\n" +
+                "        \"orderDate\": \"2021-04-11\",\n" +
+                "        \"orderActive\": \"ACTIVE\",\n" +
+                "        \"orderDesc\": null,\n" +
+                "        \"totalPrice\": 0.0,\n" +
+                "        \"accountingCode\": null,\n" +
+                "        \"paymentCode\": null,\n" +
+                "        \"status\": 0,\n" +
+                "        \"activityCheck\": 0,\n" +
+                "        \"transport\": \"bike\",\n" +
+                "        \"orderItemList\": [\n" +
+                "            {\n" +
+                "                \"id\": 34,\n" +
+                "                \"productId\": 7,\n" +
+                "                \"productCount\": 6,\n" +
+                "                \"productName\": null,\n" +
+                "                \"productAvailability\": null\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"id\": 35,\n" +
+                "                \"productId\": 4,\n" +
+                "                \"productCount\": 10,\n" +
+                "                \"productName\": null,\n" +
+                "                \"productAvailability\": null\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"id\": 36,\n" +
+                "                \"productId\": 6,\n" +
+                "                \"productCount\": 1,\n" +
+                "                \"productName\": null,\n" +
+                "                \"productAvailability\": null\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"id\": 37,\n" +
+                "                \"productId\": 5,\n" +
+                "                \"productCount\": 5,\n" +
+                "                \"productName\": null,\n" +
+                "                \"productAvailability\": null\n" +
+                "            }\n" +
+                "        ]\n" +
+                "    }\n" +
+                "}";
 
         doReturn(response).when(customerService).getOrderById(12345L);
 
         mockMvc.perform(MockMvcRequestBuilders.get(baseURI+"/get-order/{orderId}",12345L))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customerId").exists())
-                .andExpect(jsonPath("$.customerId").value(12345))
-                .andExpect(jsonPath("$.orderItemList[2].productId").value(5));
+                .andExpect(jsonPath("$.salesOrder.customerId").exists())
+                .andExpect(jsonPath("$.salesOrder.customerId").value(12345))
+                .andExpect(jsonPath("$.salesOrder.orderItemList[2].productId").value(6));
 
 
     }

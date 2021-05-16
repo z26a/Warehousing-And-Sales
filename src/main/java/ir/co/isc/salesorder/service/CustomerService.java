@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +32,9 @@ public class CustomerService {
 
     @Autowired
     private OrderItemRepository orderItemRepository;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     public Object getAllOrdersOfCustomer(Long id) {
 

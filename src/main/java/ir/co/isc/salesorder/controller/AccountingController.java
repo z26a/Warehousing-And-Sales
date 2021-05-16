@@ -14,13 +14,13 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping(value="/api/accounting/",method = {RequestMethod.GET,RequestMethod.DELETE})
+@RequestMapping(value="/orders/accounting/",method = {RequestMethod.GET,RequestMethod.DELETE})
 public class AccountingController {
 
     @Autowired
     private AccountingService accountingService;
 
-    @PostMapping(path="/cart-total-price")
+    @PostMapping(path="/orders/cart-total-price")
     public Object getCartTotalPrice(@RequestBody SalesOrder salesOrder) {
         try{
             accountingService.getCartTotalPrice(salesOrder);

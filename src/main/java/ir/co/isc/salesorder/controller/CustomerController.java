@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @RestController
-@RequestMapping(value="/api/orders",method = {RequestMethod.GET,RequestMethod.PUT,RequestMethod.POST})
+@RequestMapping(value="/orders",method = {RequestMethod.GET,RequestMethod.PUT,RequestMethod.POST})
 @Slf4j
 public class CustomerController {
 
@@ -24,7 +24,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping(path="/{id}")
+    @GetMapping(path="/orders/{id}")
     public Object getAllOrdersOfCustomer(@PathVariable(name = "id") Long id) {
         try {
             return customerService.getAllOrdersOfCustomer(id);

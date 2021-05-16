@@ -47,9 +47,6 @@ public class SalesOrder {
 
     private Long accountingCode;
 
-//    @Enumerated(EnumType.STRING)
-//    private OrderType orderType;
-
     private Long paymentCode;
 
     private int status;
@@ -57,6 +54,8 @@ public class SalesOrder {
     private int activityCheck;
 
     private String transport;
+
+    private double totalWeight;
 
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "salesOrder")
     private Set<OrderItem> orderItemList;
