@@ -63,24 +63,36 @@ public class CustomerService {
             }
         }
 
-        public Object deleteOrderById (Long orderId){
+        public Object deleteOrderById (Long orderId) {
             try {
-                salesOrderRepository.deactivateOrderById(orderId);
-                DeleteOrderByIdResponse deleteOrderByIdResponse=new DeleteOrderByIdResponse();
-                log.info("Order deleted successfully");
-                deleteOrderByIdResponse.setStatusCode(StatusCodes.OK);
-                deleteOrderByIdResponse.setResults("Order deleted successfully");
+                DeleteOrderByIdResponse deleteOrderByIdResponse = new DeleteOrderByIdResponse();
+                if (salesOrderRepository.findById(orderId).isPresent()) {
+                    if (salesOrderRepository.findById(orderId).get().getOrderActive() == OrderActive.ACTIVE) {
+                        salesOrderRepository.deactivateOrderById(orderId);
+                        log.info("Order deleted successfully");
+                        deleteOrderByIdResponse.setStatusCode(StatusCodes.OK);
+                        deleteOrderByIdResponse.setResults("Order deleted successfully");
+
+                    } else {
+                        deleteOrderByIdResponse.setStatusCode(StatusCodes.REQUEST_PROCESSING_ERROR);
+                        deleteOrderByIdResponse.setResults("No order with provided id exists");
+                    }
+
+                }
+                else {
+                    deleteOrderByIdResponse.setStatusCode(StatusCodes.REQUEST_PROCESSING_ERROR);
+                    deleteOrderByIdResponse.setResults("No order with provided id exists");
+                }
                 return deleteOrderByIdResponse;
             } catch (Exception e) {
                 log.error("Error while deleting an order: " + e.getMessage());
-                DeleteOrderByIdResponse deleteOrderByIdResponse=new DeleteOrderByIdResponse();
+                DeleteOrderByIdResponse deleteOrderByIdResponse = new DeleteOrderByIdResponse();
                 deleteOrderByIdResponse.setStatusCode(StatusCodes.REQUEST_PROCESSING_ERROR);
                 deleteOrderByIdResponse.setDescription("");
-                deleteOrderByIdResponse.setResults("Error while deleting an order by orderId "+orderId);
+                deleteOrderByIdResponse.setResults("Error while deleting an order by orderId " + orderId);
                 return deleteOrderByIdResponse;
             }
         }
-
         public Object saveBuyOrder (CartDTO cartDTO){
 
                 SalesOrder salesOrder = new SalesOrder();
@@ -101,7 +113,7 @@ public class CustomerService {
 
             }catch(Exception e){
                 log.error("Error while processing the order " + e.getMessage() );
-                return "A problem while processing your order";
+                return "A problem occurred while processing your order";
             }
 
         }

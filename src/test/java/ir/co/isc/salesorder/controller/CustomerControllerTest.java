@@ -170,12 +170,19 @@ mockMvc.perform(MockMvcRequestBuilders.get(baseURI+"/{id}",12345L))
 
     @Test
     void deleteOrderByIdTest() throws Exception {
-doReturn("Order deleted successfully").when(customerService).deleteOrderById(12345L);
+        String response="{\n" +
+                "    \"statusCode\": \"OK\",\n" +
+                "    \"description\": null,\n" +
+                "    \"results\": \"Order deleted successfully\"\n" +
+                "}";
 
-        mockMvc.perform(MockMvcRequestBuilders.put(baseURI+"/delete-order/{orderId}",12345L))
+doReturn(response).when(customerService).deleteOrderById(1L);
+
+        mockMvc.perform(MockMvcRequestBuilders.put(baseURI+"/delete-order/{orderId}",1L))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("Order deleted successfully"));
+//                .andExpect(content().string("Order deleted successfully"));
+        .andExpect(jsonPath("$.results").value("Order deleted successfully"));
     }
 
     @Test
