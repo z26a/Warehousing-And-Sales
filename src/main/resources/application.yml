@@ -1,16 +1,7 @@
 server:
-    port: 8001
+    port: 8002
 
 spring:
         application:
             name: SALES-ORDER-SERVICE
 
-#eureka:
-#    client:
-#        registryFetchIntervalSeconds : 5
-#        registerWithEureka: true
-#        fetchRegistry: true
-#        serviceUrl:
-#            defaultZone: http://localhost:8761/eureka/
-#        instance:
-#            hostname: localhost

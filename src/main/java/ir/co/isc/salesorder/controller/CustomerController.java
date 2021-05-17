@@ -1,13 +1,9 @@
 
 package ir.co.isc.salesorder.controller;
 
-import ir.co.isc.salesorder.OrderActive;
 import ir.co.isc.salesorder.dto.CartDTO;
 import ir.co.isc.salesorder.dto.UpdatedCartDTO;
-import ir.co.isc.salesorder.model.OrderItem;
-import ir.co.isc.salesorder.model.SalesOrder;
 import ir.co.isc.salesorder.service.CustomerService;
-import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;

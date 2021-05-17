@@ -59,7 +59,6 @@ class CustomerControllerTest {
     @BeforeEach
     void setUp() {
 
-//        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
         SalesOrder salesOrder=new SalesOrder(5L,"Tajrish, Tehran, Iran",
                 "bike", OrderActive.ACTIVE);
