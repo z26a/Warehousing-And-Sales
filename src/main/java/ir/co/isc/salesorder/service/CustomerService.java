@@ -2,10 +2,7 @@ package ir.co.isc.salesorder.service;
 
 import ir.co.isc.salesorder.OrderActive;
 import ir.co.isc.salesorder.StatusCodes;
-import ir.co.isc.salesorder.dto.CartDTO;
-import ir.co.isc.salesorder.dto.DeleteOrderByIdResponse;
-import ir.co.isc.salesorder.dto.GetOrderByIdResponse;
-import ir.co.isc.salesorder.dto.UpdatedCartDTO;
+import ir.co.isc.salesorder.dto.*;
 import ir.co.isc.salesorder.model.OrderItem;
 import ir.co.isc.salesorder.model.SalesOrder;
 import ir.co.isc.salesorder.repository.OrderItemRepository;
@@ -13,14 +10,14 @@ import ir.co.isc.salesorder.repository.SalesOrderRepository;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.ServiceMode;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 @NoArgsConstructor
@@ -63,7 +60,7 @@ public class CustomerService {
             }
         }
 
-        public Object deleteOrderById (Long orderId) {
+        public DeleteOrderByIdResponse deleteOrderById (Long orderId) {
             try {
                 DeleteOrderByIdResponse deleteOrderByIdResponse = new DeleteOrderByIdResponse();
                 if (salesOrderRepository.findById(orderId).isPresent()) {
@@ -96,19 +93,34 @@ public class CustomerService {
         public Object saveBuyOrder (CartDTO cartDTO){
 
                 SalesOrder salesOrder = new SalesOrder();
+                OrderItemDTO orderItemDTO=new OrderItemDTO();
+                List<OrderItemDTO> orderItemDTOList=new ArrayList<>();
                 salesOrder.setCustomerId(Long.valueOf(cartDTO.getCustomerId()));
                 salesOrder.setCustomerAddress(cartDTO.getCustomerAddress());
                 salesOrder.setTransport(cartDTO.getTransport());
                 salesOrder.setOrderActive(OrderActive.ACTIVE);
                 for (OrderItem item : cartDTO.getOrderItemList()) {
                     salesOrder.addItem(item);
+                    orderItemDTO.setId(item.getProductId());
+                    orderItemDTO.setItemQuantity(item.getProductCount());
+                    orderItemDTOList.add(orderItemDTO);
                 }
             try {
                 // check availability of items using an api from warehouse
 //                throw new UnsupportedOperationException("Not supported yet."); //Require warehouse service.
                 // check viability of moving the items using an api from delivery
 //                throw new UnsupportedOperationException("Not supported yet."); //Require warehouse service.
-                salesOrderRepository.save(salesOrder);
+
+                salesOrder=salesOrderRepository.save(salesOrder);
+
+                // ask accounting service to compute total price
+
+//                OrderDetailDTO orderDetailDTO=new OrderDetailDTO(salesOrder.getId(),orderItemDTOList);
+//
+//                AccountingDTO accountingDTO=restTemplate.postForObject("",orderDetailDTO,AccountingDTO.class);
+//                assert accountingDTO != null;
+//                salesOrderRepository.saveTotalPriceAndAccountingCode(accountingDTO.getAccountingCode(),accountingDTO.getTotalPrice(),salesOrder.getId());
+
                 return "Your order has been successfully registered";
 
             }catch(Exception e){

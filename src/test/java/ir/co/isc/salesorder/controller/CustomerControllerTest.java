@@ -51,7 +51,7 @@ class CustomerControllerTest {
     @MockBean
     CustomerService customerService;
 
-    final String baseURI="/api/orders";
+    final String baseURI="/orders";
 
 
 

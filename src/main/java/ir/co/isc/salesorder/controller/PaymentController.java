@@ -1,6 +1,6 @@
 package ir.co.isc.salesorder.controller;
 
-import ir.co.isc.salesorder.model.SalesOrder;
+import ir.co.isc.salesorder.dto.OrderPaymentDetailDTO;
 import ir.co.isc.salesorder.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,9 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @PostMapping(path="orders/pay-order")
-    public Object payOrder(@RequestBody SalesOrder salesOrder) {
+    public Object payOrder(@RequestBody OrderPaymentDetailDTO orderPaymentDetailDTO) {
         try{
-            paymentService.payOrder(salesOrder);
+            paymentService.payOrder(orderPaymentDetailDTO);
             throw new UnsupportedOperationException("Not supported yet."); //Require accounting service.
             // call an api from accounting service to send payment code to it
         }catch (Exception e){

@@ -1,11 +1,12 @@
 package ir.co.isc.salesorder.service;
 
-import ir.co.isc.salesorder.dto.AccountingDTO;
+import ir.co.isc.salesorder.dto.OrderPaymentDetailDTO;
 import ir.co.isc.salesorder.dto.PaymentDTO;
 import ir.co.isc.salesorder.model.SalesOrder;
 import ir.co.isc.salesorder.repository.SalesOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class PaymentService {
@@ -13,13 +14,17 @@ public class PaymentService {
 @Autowired
 private SalesOrderRepository salesOrderRepository;
 
-    public Object payOrder(SalesOrder salesOrder){
+@Autowired
+private RestTemplate restTemplate;
 
-        PaymentDTO paymentDTO=new PaymentDTO();
-        Long accountingCode =paymentDTO.getPaymentCode();
+    public Object payOrder(OrderPaymentDetailDTO orderPaymentDetailDTO){
+
+        PaymentDTO paymentDTO=restTemplate.postForObject("",orderPaymentDetailDTO,PaymentDTO.class);
+
+        Long paymentCode =paymentDTO.getPaymentCode();
         Long salesOrderId= paymentDTO.getSalesOrderId();
 
-        salesOrderRepository.savePaymentCode(accountingCode,salesOrderId);
+        salesOrderRepository.savePaymentCode(paymentCode,salesOrderId);
 
         throw new UnsupportedOperationException("Not supported yet."); //Require payment service.
     }

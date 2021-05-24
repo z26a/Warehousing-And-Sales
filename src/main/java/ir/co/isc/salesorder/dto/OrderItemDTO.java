@@ -19,8 +19,8 @@ public class OrderItemDTO {
     @Column(nullable = false)
     private long itemQuantity;
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
-    private SalesOrder salesOrder;
+//    @ManyToOne
+//    @JsonIgnore
+//    @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
+//    private SalesOrder salesOrder;
 }

@@ -27,7 +27,7 @@ public interface SalesOrderRepository extends CrudRepository<SalesOrder, Long> {
     @Transactional
     @Query("update SalesOrder salesOrder set salesOrder.totalPrice=:totalPrice, " +
             "salesOrder.accountingCode=:accountingCode where salesOrder.id=:salesOrderId")
-    void saveTotalPriceAndAccountingCode(@Param("accountingCode") Long accountingCode
+     void saveTotalPriceAndAccountingCode(@Param("accountingCode") Long accountingCode
             , @Param("totalPrice") double totalPrice, @Param("salesOrderId") Long salesOrderId);
 
     @Modifying

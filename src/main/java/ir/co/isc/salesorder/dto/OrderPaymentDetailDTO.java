@@ -5,16 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import java.util.List;
-
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDetailDTO {
-
+@Data
+public class OrderPaymentDetailDTO {
     @NonNull
     private Long salesOrderId;
 
-    private List<OrderItemDTO> orderItemDTOList;
-
+    @NonNull
+    private Long totalPrice;
 }

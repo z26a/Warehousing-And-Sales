@@ -2,6 +2,7 @@
 package ir.co.isc.salesorder.controller;
 
 import ir.co.isc.salesorder.dto.CartDTO;
+import ir.co.isc.salesorder.dto.DeleteOrderByIdResponse;
 import ir.co.isc.salesorder.dto.UpdatedCartDTO;
 import ir.co.isc.salesorder.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ return customerService.getOrderById(Long.valueOf(orderId));
 
 
     @PutMapping(path="/delete-order/{orderId}")
-    public Object deleteOrderById(@PathVariable(name="orderId") String orderId){
+    public DeleteOrderByIdResponse deleteOrderById(@PathVariable(name="orderId") String orderId){
 return customerService.deleteOrderById(Long.valueOf(orderId));
     }
 
