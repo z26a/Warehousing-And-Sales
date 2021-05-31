@@ -15,7 +15,7 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    @PostMapping(path="orders/pay-order")
+    @PostMapping(path="api/order/pay-order")
     public Object payOrder(@RequestBody OrderPaymentDetailDTO orderPaymentDetailDTO) {
         try{
             paymentService.payOrder(orderPaymentDetailDTO);

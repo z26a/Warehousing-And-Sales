@@ -14,4 +14,6 @@ public class PaymentDTO {
 
     private Long paymentCode;
 
+    private String paymentDetail;
+
 }

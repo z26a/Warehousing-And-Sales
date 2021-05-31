@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
-@RequestMapping(value="/orders/accounting/",method = {RequestMethod.GET,RequestMethod.DELETE})
+@RequestMapping(value="api/order/accounting/",method = {RequestMethod.GET,RequestMethod.DELETE})
 public class AccountingController {
 
     @Autowired
     private AccountingService accountingService;
 
-    @PostMapping(path="/orders/cart-total-price")
+    @PostMapping(path="api/orders/cart-total-price")
     public Object getCartTotalPrice(@RequestBody SalesOrder salesOrder) {
         try{
             accountingService.getCartTotalPrice(salesOrder);

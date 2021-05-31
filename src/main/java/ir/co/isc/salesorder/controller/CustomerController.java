@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @RestController
-@RequestMapping(value="/orders",method = {RequestMethod.GET,RequestMethod.PUT,RequestMethod.POST})
+@RequestMapping(value="api/order",method = {RequestMethod.GET,RequestMethod.PUT,RequestMethod.POST})
 @Slf4j
 public class CustomerController {
 

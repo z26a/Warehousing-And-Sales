@@ -115,11 +115,11 @@ public class CustomerService {
 
                 // ask accounting service to compute total price
 
-//                OrderDetailDTO orderDetailDTO=new OrderDetailDTO(salesOrder.getId(),orderItemDTOList);
-//
-//                AccountingDTO accountingDTO=restTemplate.postForObject("",orderDetailDTO,AccountingDTO.class);
-//                assert accountingDTO != null;
-//                salesOrderRepository.saveTotalPriceAndAccountingCode(accountingDTO.getAccountingCode(),accountingDTO.getTotalPrice(),salesOrder.getId());
+                OrderDetailDTO orderDetailDTO=new OrderDetailDTO(salesOrder.getId(),orderItemDTOList);
+
+                AccountingDTO accountingDTO=restTemplate.postForObject("",orderDetailDTO,AccountingDTO.class);
+                assert accountingDTO != null;
+                salesOrderRepository.saveTotalPriceAndAccountingCode(accountingDTO.getAccountingCode(),accountingDTO.getTotalPrice(),salesOrder.getId());
 
                 return "Your order has been successfully registered";
 
